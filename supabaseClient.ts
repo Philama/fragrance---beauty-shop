@@ -1,4 +1,3 @@
-
 import { createClient, User, AuthChangeEvent, Session } from '@supabase/supabase-js'; // Added AuthChangeEvent, Session
 import { Product, DetailedProduct, ProductVariant, Review, RatingDistribution, Reviewer } from './types';
 
@@ -55,7 +54,7 @@ export const onAuthStateChange = (callback: (event: AuthChangeEvent, session: Se
 
 
 // --- Admin Check ---
-const ADMIN_EMAIL = 'admin@example.com'; 
+const ADMIN_EMAIL = 'guardi2005@gmail.com'; 
 export const isAdmin = (user: User | null): boolean => {
   if (!user || !user.email) return false;
   return user.email === ADMIN_EMAIL;

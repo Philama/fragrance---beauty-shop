@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { AdminLoginPageProps } from '../types';
 import { HouseIcon } from './Icons'; 
@@ -87,4 +86,4 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
 };
 
 // For display purposes only, in a real app, don't expose admin email like this.
-const ADMIN_EMAIL_FOR_DISPLAY = 'admin@example.com';
+const ADMIN_EMAIL_FOR_DISPLAY = 'guardi2005@gmail.com';

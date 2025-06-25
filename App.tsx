@@ -47,6 +47,24 @@ const App: React.FC = () => {
   const [searchQueryForPage, setSearchQueryForPage] = useState<string>('');
 
 
+  // --- Favorites State ---
+  const [favoriteProductIds, setFavoriteProductIds] = useState<string[]>(() => {
+    const stored = localStorage.getItem('favoriteProductIds');
+    return stored ? JSON.parse(stored) : [];
+  });
+  useEffect(() => {
+    localStorage.setItem('favoriteProductIds', JSON.stringify(favoriteProductIds));
+  }, [favoriteProductIds]);
+
+  // Toggle favorite handler
+  const handleToggleFavorite = (productId: string) => {
+    setFavoriteProductIds(prev =>
+      prev.includes(productId)
+        ? prev.filter(id => id !== productId)
+        : [...prev, productId]
+    );
+  };
+
   useEffect(() => {
     setAuthLoading(true);
     
@@ -111,8 +129,6 @@ const App: React.FC = () => {
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
   }, [cartItems]);
 
-  const featuredItems = allProducts.slice(0, Math.min(allProducts.length, 5)); 
-  const mightAlsoLikeItems = allProducts.slice(Math.min(allProducts.length, 1), Math.min(allProducts.length, 6)); 
 
   const heroSectionsData = [{
     title: 'Novedades', subtitle: 'Explora los últimos aromas',
@@ -131,11 +147,40 @@ const App: React.FC = () => {
     setCurrentPage('home');
   };
   
-  const handleAddNewProduct = async (newProductData: Product) => {
-    const productRowToInsert: Partial<ProductRow> = { 
-      brand: newProductData.brand, name: newProductData.name, price: newProductData.price,
-      image_url: newProductData.imageUrl, image_urls: [newProductData.imageUrl],
-      description: `Descripción de ${newProductData.name}`, 
+  const handleAddNewProduct = async (newProductData: any) => {
+    // Permitir todos los campos posibles
+    const productRowToInsert: Partial<ProductRow> = {
+      brand: newProductData.brand,
+      name: newProductData.name,
+      price: newProductData.price,
+      image_url: newProductData.imageUrl,
+      image_urls: newProductData.imageUrls || [newProductData.imageUrl],
+      description: newProductData.descripcionCorta || newProductData.description || '',
+      long_description: newProductData.longDescription || '',
+      variants: newProductData.variants || null,
+      reviews: newProductData.reviews || null,
+      default_variant_id: newProductData.defaultVariantId || null,
+      product_details_content: newProductData.productDetailsContent || '',
+      size_and_fit_content: newProductData.sizeAndFitContent || '',
+      ingredients_content: newProductData.ingredientsContent || '',
+      shipping_and_returns_content: newProductData.shippingAndReturnsContent || '',
+      average_rating: newProductData.averageRating || null,
+      total_reviews: newProductData.totalReviews || null,
+      rating_distribution: newProductData.ratingDistribution || null,
+      installments: newProductData.installments || null,
+      codigo_producto: newProductData.codigoProducto || '',
+      categoria: newProductData.categoria || '',
+      subcategoria: newProductData.subcategoria || '',
+      precio_original: newProductData.precioOriginal || null,
+      porcentaje_descuento: newProductData.porcentajeDescuento || null,
+      precio_final: newProductData.precioFinal || null,
+      precio_sin_impuestos_nacionales: newProductData.precioSinImpuestosNacionales || null,
+      moneda: newProductData.moneda || '',
+      notas_olfativas_tipo_piel: newProductData.notasOlfativasTipoPiel || '',
+      beneficios_clave: newProductData.beneficiosClave || '',
+      stock_limite_unidades: newProductData.stockLimiteUnidades || null,
+      incluye_items: newProductData.incluyeItems || '',
+      apto_desde_edad: newProductData.aptoDesdeEdad || null,
     };
     if (newProductData.id && !newProductData.id.startsWith('temp-')) {
         productRowToInsert.id = newProductData.id;
@@ -377,8 +422,18 @@ const App: React.FC = () => {
 
         {!productsLoading && !productsError && allProducts.length > 0 && (
           <>
-            <ProductCarousel title="Artículos Destacados" products={featuredItems} onProductClick={handleProductCardClick} />
-            <ProductCarousel title="También Te Podría Gustar" products={mightAlsoLikeItems} onProductClick={handleProductCardClick} />
+            {activeTab === Tab.Fragrances && (
+              <ProductCarousel title="Fragancias" products={allProducts.filter(p => p.category === 'Fragrances')} onProductClick={handleProductCardClick} favoriteProductIds={favoriteProductIds} onToggleFavorite={handleToggleFavorite} />
+            )}
+            {activeTab === Tab.Beauty && (
+              <ProductCarousel title="Belleza" products={allProducts.filter(p => p.category === 'Beauty')} onProductClick={handleProductCardClick} favoriteProductIds={favoriteProductIds} onToggleFavorite={handleToggleFavorite} />
+            )}
+            {activeTab === Tab.Brands && (
+              <ProductCarousel title="Marcas" products={allProducts} onProductClick={handleProductCardClick} favoriteProductIds={favoriteProductIds} onToggleFavorite={handleToggleFavorite} />
+            )}
+            {activeTab === Tab.Favorites && (
+              <ProductCarousel title="Favoritos" products={allProducts.filter(p => favoriteProductIds.includes(p.id))} onProductClick={handleProductCardClick} favoriteProductIds={favoriteProductIds} onToggleFavorite={handleToggleFavorite} />
+            )}
           </>
         )}
         {promoCardsData.map((promo, index) => (<div className="p-4" key={index}><PromoCard {...promo} /></div>))}

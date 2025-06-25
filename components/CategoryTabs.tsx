@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Tab } from '../types';
 
@@ -11,6 +10,8 @@ export const CategoryTabs: React.FC<CategoryTabsProps> = ({ activeTab, onTabClic
   const tabs = [
     { id: Tab.Fragrances, label: 'Fragancias' },
     { id: Tab.Beauty, label: 'Belleza' },
+    { id: Tab.Brands, label: 'Marcas' },
+    { id: Tab.Favorites, label: 'Favoritos' },
   ];
 
   return (

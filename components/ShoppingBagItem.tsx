@@ -1,9 +1,11 @@
-
 import React from 'react';
 import { ShoppingBagItemProps } from '../types';
 import { QuantityControl } from './QuantityControl';
 
 export const ShoppingBagItem: React.FC<ShoppingBagItemProps> = ({ item, onUpdateQuantity, onRemoveItem }) => {
+  const [imgError, setImgError] = React.useState(false);
+  const defaultImage = 'https://via.placeholder.com/70x93.png?text=No+Image';
+
   const handleDecrease = () => {
     if (item.quantity > 1) {
       onUpdateQuantity(item.id, item.quantity - 1);
@@ -27,12 +29,15 @@ export const ShoppingBagItem: React.FC<ShoppingBagItemProps> = ({ item, onUpdate
   return (
     <div className="flex gap-4 bg-white px-4 py-3 justify-between items-center">
       <div className="flex items-start gap-4">
-        <div
-          className="bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-lg w-[70px] h-[93px] shrink-0"
-          style={{ backgroundImage: `url("${item.imageUrl}")` }}
-          role="img"
-          aria-label={`${item.brand} ${item.name}`}
-        ></div>
+        <div className="bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-lg w-[70px] h-[93px] shrink-0 overflow-hidden">
+          <img
+            src={imgError ? defaultImage : item.imageUrl}
+            alt={item.name}
+            className="w-full h-full object-cover rounded-lg"
+            onError={() => setImgError(true)}
+            loading="lazy"
+          />
+        </div>
         <div className="flex flex-1 flex-col justify-center">
           <p className="text-[#171212] text-base font-medium leading-normal">{item.brand}</p>
           <p className="text-[#82686a] text-sm font-normal leading-normal">

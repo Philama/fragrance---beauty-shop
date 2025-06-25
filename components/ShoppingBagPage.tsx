@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ShoppingBagPageProps } from '../types';
 import { ShoppingBagItem } from './ShoppingBagItem';
@@ -65,9 +64,12 @@ export const ShoppingBagPage: React.FC<ShoppingBagPageProps> = ({
         )}
         
         {items.length > 0 && (
-            <p className="text-[#82686a] text-sm font-normal leading-normal pb-3 pt-1 px-4 text-center">
-            Paga en 4 cuotas sin interés disponibles al finalizar la compra.
-            </p>
+            <div className="flex flex-col items-center justify-center pb-3 pt-1 px-4">
+              <img src="https://www.gocuotas.com/assets/images/logo-gocuotas.svg" alt="GoCuotas" className="h-8 mb-2" style={{maxWidth: '120px'}} />
+              <p className="text-[#82686a] text-sm font-normal leading-normal text-center">
+                Paga en 4 cuotas sin interés con <a href="https://www.gocuotas.com/" target="_blank" rel="noopener noreferrer" className="text-[#e82630] underline hover:text-[#c62029]">GoCuotas</a> disponibles al finalizar la compra.
+              </p>
+            </div>
         )}
       </div>
 

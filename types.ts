@@ -6,6 +6,8 @@ export type User = SupabaseUser; // Re-export for convenience
 export enum Tab {
   Fragrances = 'Fragrances',
   Beauty = 'Beauty',
+  Brands = 'Brands',
+  Favorites = 'Favorites',
 }
 
 export interface Product {
@@ -14,6 +16,7 @@ export interface Product {
   name: string;
   price: number; 
   imageUrl: string; 
+  category?: 'Fragrances' | 'Beauty';
 }
 
 export interface ProductVariant {
